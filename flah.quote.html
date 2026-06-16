@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Flash Quote Generator</title>
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+  }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #0f172a;
+  }
+
+  /* 🌈 ANIMATED BACKGROUND BLOBS */
+  body::before,
+  body::after {
+    content: "";
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.7;
+    animation: float 8s infinite ease-in-out;
+  }
+
+  body::before {
+    background: #ff6b6b;
+    top: 10%;
+    left: 20%;
+  }
+
+  body::after {
+    background: #4dabf7;
+    bottom: 10%;
+    right: 20%;
+    animation-delay: 2s;
+  }
+
+  @keyframes float {
+    0% { transform: translateY(0px) translateX(0px) scale(1); }
+    50% { transform: translateY(-40px) translateX(30px) scale(1.2); }
+    100% { transform: translateY(0px) translateX(0px) scale(1); }
+  }
+
+  .container {
+    width: 420px;
+    padding: 28px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    text-align: center;
+    color: white;
+    z-index: 1;
+  }
+
+  h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+  }
+
+  .quote {
+    font-size: 18px;
+    margin-bottom: 15px;
+    min-height: 70px;
+    line-height: 1.6;
+  }
+
+  .author {
+    font-style: italic;
+    margin-bottom: 25px;
+    color: #ccc;
+  }
+
+  .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  button {
+    padding: 10px 14px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: white;
+    transition: 0.3s;
+  }
+
+  button:hover {
+    transform: scale(1.05);
+  }
+
+  .dark-btn {
+    background: linear-gradient(135deg, #232526, #414345);
+  }
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>✨ Flash Quote Generator</h1>
+
+  <div class="quote" id="quoteText"></div>
+  <div class="author" id="quoteAuthor"></div>
+
+  <div class="buttons">
+    <button onclick="newQuote()">New Quote</button>
+    <button onclick="copyQuote()">Copy</button>
+    <button onclick="shareQuote()">Share</button>
+    <button class="dark-btn" onclick="toggleDark()">Dark Mode</button>
+  </div>
+</div>
+
+<script>
+const quotes = [
+  { text: "The best way to get started is to quit talking and begin doing.", author: "Walt Disney" },
+  { text: "Success is not final, failure is not fatal.", author: "Winston Churchill" },
+  { text: "Don’t let yesterday take up too much of today.", author: "Will Rogers" },
+  { text: "Your time is limited, so don’t waste it living someone else’s life.", author: "Steve Jobs" },
+  { text: "Believe you can and you’re halfway there.", author: "Theodore Roosevelt" },
+  { text: "Dream big and dare to fail.", author: "Norman Vaughan" }
+];
+
+const quoteText = document.getElementById("quoteText");
+const quoteAuthor = document.getElementById("quoteAuthor");
+
+let currentQuote = {};
+
+function newQuote() {
+  const random = Math.floor(Math.random() * quotes.length);
+  currentQuote = quotes[random];
+
+  quoteText.textContent = `"${currentQuote.text}"`;
+  quoteAuthor.textContent = `– ${currentQuote.author}`;
+}
+
+function copyQuote() {
+  const text = `"${currentQuote.text}" – ${currentQuote.author}`;
+  navigator.clipboard.writeText(text);
+  alert("Quote copied!");
+}
+
+function shareQuote() {
+  const text = `"${currentQuote.text}" – ${currentQuote.author}`;
+
+  if (navigator.share) {
+    navigator.share({ text });
+  } else {
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`);
+  }
+}
+
+function toggleDark() {
+  document.body.classList.toggle("dark");
+}
+
+newQuote();
+</script>
+
+</body>
+</html>
